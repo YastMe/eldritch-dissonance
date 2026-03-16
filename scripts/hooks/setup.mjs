@@ -4,7 +4,7 @@ export function setupHook() {
 
     Object.defineProperty(globalThis.pf1.documents.item.ItemSpellPF.prototype, "eldritchDissonance", {
         get() {
-            if (!this.spellbook.spellPoints.useSystem) return 0;
+            if (!this.spellbook.spellPoints.useSystem || this.system.level <= 0) return 0;
             else if (this.spellbook.prepared)
                 return this.timesUsed * this.system.level;
             else

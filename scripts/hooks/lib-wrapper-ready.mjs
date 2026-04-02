@@ -7,7 +7,6 @@ export function onLibWrapperReady() {
 
         const rollData = this.shared.rollData;
         rollData.chargeCostBonus += this.item.eldritchDissonance;
-        this.item.timesUsed++;
         return wrapped(...args);
     }, "WRAPPER");
 }

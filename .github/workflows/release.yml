@@ -60,4 +60,4 @@ jobs:
           TAG=${{ steps.get_version.outputs.tag }}
           gh release upload $TAG \
             module.json \
-            "$VERSION.zip"
+            "eldritch-dissonance.zip"

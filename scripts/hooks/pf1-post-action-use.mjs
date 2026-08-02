@@ -5,9 +5,21 @@ function calculateCost(spell) {
 		else if (Number(spell.system.spellPoints.cost) === 0 && !spell.getFlag("eldritch-dissonance", "ignoreDissonance"))
 			return Number(spell.system.spellPoints.cost) + spell.eldritchDissonance;
 	}
-	else if (spell.system?.spellPoints?.cost === undefined)
+	else if (spell.system?.spellPoints?.cost === undefined || (!spell.system?.spellPoints?.cost && spell.system?.spellPoints?.cost !== 0))
 		return 1 + spell.system.level + spell.eldritchDissonance;
 	return 0;
+}
+
+function getOverHalfAmount(spell, spellbook) {
+	const cost = calculateCost(spell);
+	const before = spellbook.spellPoints.value + cost;
+	const max = spellbook.spellPoints.max;
+
+	const half = Math.ceil(max / 2);
+	const threshold = Math.min(before, half);
+	const final = spellbook.spellPoints.value;
+
+	return Math.max(0, threshold - final);
 }
 
 export function onPf1PostActionUse(action) {
@@ -19,7 +31,7 @@ export function onPf1PostActionUse(action) {
 	}
 	if (!actor.getFlag("eldritch-dissonance", "ignoreFatigue") && item.type === "spell" && spellbook.spellPoints.useSystem) {
 		if (spellbook.spellPoints.value < spellbook.spellPoints.max / 2) {
-			const dc = 10 + calculateCost(item);
+			const dc = 10 + getOverHalfAmount(item, spellbook);
 			const content = `
 				<div class="pf1 chat-card item-card" data-actor-id="${actor.id}" data-item-id="${item.id}">
 					<div class="card-content">

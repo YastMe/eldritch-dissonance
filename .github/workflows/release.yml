@@ -39,14 +39,13 @@ jobs:
           REPO=${{ github.repository }}
           jq --arg version "$VERSION" \
              --arg manifest "https://github.com/$REPO/releases/download/$TAG/module.json" \
-             --arg download "https://github.com/$REPO/releases/download/$TAG/$VERSION.zip" \
+             --arg download "https://github.com/$REPO/releases/download/$TAG/eldritch-dissonance.zip" \
              '.version = $version | .manifest = $manifest | .download = $download' \
              module.json > module.json.tmp && mv module.json.tmp module.json
 
       - name: Create module zip
         run: |
-          VERSION=${{ steps.get_version.outputs.version }}
-          zip -r "$VERSION.zip" . \
+          zip -r "eldritch-dissonance.zip" . \
             --exclude ".git/*" \
             --exclude ".github/*" \
             --exclude "*.zip" \
